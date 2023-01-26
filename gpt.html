@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Jogo da Velha</title>
+  <style>
+    /* Define o estilo da tabela */
+    table {
+      border-collapse: collapse;
+    }
+    td {
+      width: 50px;
+      height: 50px;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 20px;
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <table id="tabela">
+    <tr>
+      <td id="0"></td>
+      <td id="1"></td>
+      <td id="2"></td>
+    </tr>
+    <tr>
+      <td id="3"></td>
+      <td id="4"></td>
+      <td id="5"></td>
+    </tr>
+    <tr>
+      <td id="6"></td>
+      <td id="7"></td>
+      <td id="8"></td>
+    </tr>
+  </table>
+  <script>
+    // Variáveis para controlar o jogo
+    var jogadorAtual = "X";
+    var jogadas = 0;
+    var tabela = document.getElementById("tabela");
+
+    // Adiciona eventos de click nas células da tabela
+    for (var i = 0; i < 9; i++) {
+      tabela.children[0].children[i % 3].children[Math.floor(i / 3)].addEventListener("click", fazerJogada);
+    }
+
+    // Função que é executada quando uma célula é clicada
+   function fazerJogada() {
+      // Verifica se a célula já foi preenchida
+      if (this.innerHTML !== "") {
+        return;
+      }
+      // Preenche a célula com o jogador atual
+      this.innerHTML = jogadorAtual;
+      jogadas++;
+      // Verifica se há um vencedor
+      verificarVencedor();
+      // Alterna o jogador atual
+      if (jogadorAtual === "X") {
+        jogadorAtual = "O";
+      } else {
+        jogadorAtual = "X";
+      }
+    }
+    function verificarVencedor() {
+      var combinacoes = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+      for (var i = 0; i < combinacoes.length; i++) {
+        var celula1 = document.getElementById(combinacoes[i][0]).innerHTML;
+        var celula2 = document.getElementById(combinacoes[i][1]).innerHTML;
+        var celula3 = document.getElementById(combinacoes[i][2]).innerHTML;
+        if (celula1 === celula2 && celula2 === celula3 && celula1 !== "") {
+          alert("Jogador " + celula1 + " venceu!");
+          reiniciarJogo();
+        }
+      }
+      // Verifica se houve empate
+      if (jogadas === 9) {
+        alert("Empate!");
+        reiniciarJogo();
+      }
+    }
+    function reiniciarJogo() {
+      jogadorAtual = "X";
+      jogadas = 0;
+      for (var i = 0; i < 9; i++) {
+        document.getElementById(i).innerHTML = "";
+      }
+    }
+  </script>
+</body>
